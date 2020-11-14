@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema",
+    "description": "Configuration file for coc.nvim",
+    "java.home": "C:\\Program Files\\Java\\jdk1.8.0_131",
+    "suggest.minTriggerInputLength": 2,
+    "languageserver": {
+    "clangd": {
+      "command": "clangd",
+      "args": ["--background-index"],
+      "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".vim/", ".git/", ".hg/"],
+      "filetypes": ["c", "cpp", "objc", "objcpp"]
+    }
+  }
+}
