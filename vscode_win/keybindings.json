@@ -1,0 +1,76 @@
+// Place your key bindings in this file to override the defaults
+
+// What is important to me:
+// =======================
+// - ctrl+shift+alt+left (f1)   go to symbol in current file
+// - ctrl+shift+alt+right (f2)  go to symbol in whole workspace
+// - ctrl+shift+alt+right (f2)  go to symbol in whole workspace
+// - cf3 (f3)                   go to any currently open buffer
+// - f12                        go to definition (when on reference) or peek references (when on definition)
+// - shift+f12                  peek references (when on another reference)
+// - ctrl+f12                   go to implementation
+// - ctrl+k ctrl+i              hover action
+// -----------------------
+// - shift+enter                insert line above
+// - ctrl+enter                 insert line below
+// - alt+up/down                move selection up or down
+// - alt+shift+up/down          copy selection up or down
+// - alt+shift+right/left       expand or shrink selection
+// - alt+shift+lclick           column multi cursor selection
+// - ctrl+shift+\               toggle between scope brackets
+// - ctrl+shift-l               select all occurrences
+// -----------------------
+// - ctrl+1 ... 9               toggle split by index
+// - alt+1 ... 9                toggle tabs by index in current split
+// - ctrl+alt+right/left        move current buffer to another split
+// - alt+left/right             go to previous / next visits
+// -----------------------
+// - ctrl+b                     toggle sidebar
+// - TODO                       rename symbol
+// - TODO ctrl+n/p to select up or down in drop-down lists
+
+[
+    {
+        "key": "ctrl+;",
+        "command": "extension.jumpy-word",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "Escape",
+        "command": "extension.jumpy-exit",
+        "when": "editorTextFocus && jumpy.isJumpyMode"
+	},
+    {
+        "key": "ctrl+shift+alt+left",
+        "command": "workbench.action.gotoSymbol",
+    },
+    {
+        "key": "f1",
+        "command": "workbench.action.gotoSymbol",
+    },
+    {
+        "key": "ctrl+shift+alt+right",
+        "command": "workbench.action.showAllSymbols",
+    },
+    {
+        "key": "f2",
+        "command": "workbench.action.showAllSymbols",
+    },
+    {
+        "key": "ctrl+shift+alt+up",
+        "command": "workbench.action.showAllEditors",
+    },
+    {
+        "key": "f3",
+        "command": "workbench.action.showAllEditors",
+    },
+    {
+        "key": "ctrl+k ctrl+i",
+        "command": "editor.action.showDefinitionPreviewHover",
+        "when": "editorTextFocus",
+    },
+    {   "key": "shift+enter",
+        "command": "editor.action.insertLineBefore",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+]

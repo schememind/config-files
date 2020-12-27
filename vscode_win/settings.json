@@ -1,0 +1,27 @@
+{
+    "workbench.startupEditor": "newUntitledFile",
+    "C_Cpp.updateChannel": "Insiders",
+    "window.zoomLevel": 0,
+    "editor.minimap.enabled": false,
+    "editor.rulers": [
+        80,
+        120
+    ],
+    "vim.easymotion": true,
+    // "editor.lineNumbers": "relative",     // for vim
+    "clock.active": true,
+    "clock.alignment": "Right",
+    "clock.format": "ddd dd-mmm HH:MM",
+    "typescript.disableAutomaticTypeAcquisition": true,
+    "d.servedPath": "$HOME\\AppData\\Roaming\\code-d\\bin\\serve-d.exe",
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "editor.fontFamily": "Consolas",
+    "editor.fontSize": 14,
+    "window.menuBarVisibility": "default",
+    "workbench.colorTheme": "Solarized Dark",
+    "breadcrumbs.enabled": true,
+    "editor.occurrencesHighlight": false,
+    "telemetry.enableTelemetry": false,
+    "telemetry.enableCrashReporter": false,
+}

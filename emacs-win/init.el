@@ -31,11 +31,32 @@
         (global-company-mode 1)
         (global-set-key (kbd "C-<tab>") 'company-complete))
 
+;; Syntax checker (also used in LSP mode)
+(use-package flycheck
+  :ensure t
+  :init
+  (global-flycheck-mode t))
+
 ;; Avy - like easymotion (but not to use in evil/vim mode)
 ;; https://github.com/abo-abo/avy
 (use-package avy
   :ensure t
   :bind ("M-s" . avy-goto-char))
+
+;; Expand region with C-=
+;; Shring region wiht C-- C-=
+(use-package expand-region
+  :ensure t
+  :bind ("C-=" . er/expand-region))
+
+;; Multiple cursors
+(use-package multiple-cursors
+  :ensure t
+  :bind (("C-S-c C-S-c" . mc/edit-lines)
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this))
+  )
 
 ;; helm enhanced searching
 (use-package helm
@@ -75,6 +96,10 @@
 (use-package treemacs
   :ensure t)
 
+;; D language
+(use-package d-mode
+  :ensure t)
+
 ;; =========
 ;; evil-mode
 ;; =========
@@ -90,7 +115,7 @@
   (setq evil-shift-round nil)
   (setq evil-want-C-u-scroll t)
   :config ;; tweak evil after loading it
-  (evil-mode 1)
+  (evil-mode -1)    ;; change to 1 to enable evil mode at startup
 
   ;; example how to map a command in normal mode (called 'normal state' in evil)
   ;;(define-key evil-normal-state-map (kbd ", w") 'evil-window-vsplit)
@@ -160,7 +185,7 @@ Position the cursor at it's beginning, according to the current mode."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes (quote (wombat)))
- '(package-selected-packages (quote (use-package))))
+ '(package-selected-packages (quote (powerline use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

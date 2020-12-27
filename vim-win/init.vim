@@ -2,7 +2,8 @@
 " ================
 " "*y - copy to clipboard
 " "*p - paste from clipboard
-" space-f  - helm style search
+" space-; - easymotion jump to character (like Avy in Emacs)
+" space-f - helm style search
 " space-F - TODO helm style search in multiple files (:vimgrep ‘searchstring’ **/*.cpp)
 " space-h - TODO replace <from> <to> (:%s/from/to/g)
 " space-z - NERDTreeToggle (toggle visibility)
@@ -14,7 +15,7 @@ set encoding=utf-8
 set nocompatible
 filetype off
 
-" Plugins
+" Plugins (vim-plug manager is used, run :PlugInstall to install all plugins)
 call plug#begin('$HOME/AppData/Local/nvim/plugged/')
 
 Plug 'preservim/nerdtree'
@@ -22,6 +23,7 @@ Plug 'qpkorr/vim-bufkill'     " :BUN :BD :BW / :BB :BF :BA
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'vim-airline/vim-airline'
+Plug 'easymotion/vim-easymotion'
 
 call plug#end()
 
@@ -71,6 +73,10 @@ set hlsearch        " highlight matches
 set ignorecase
 set smartcase
 
+" Remap leader key to space
+nnoremap <SPACE> <Nop>
+let mapleader=" "
+
 " Font
 set guifont=Consolas:h10
 
@@ -84,6 +90,9 @@ let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/]\.(git|hg|svn|vscode)$',
   \ 'file': '\v\.(exe|so|dll|obj)$',
   \ }
+
+" Easymotion mappings
+nmap <leader>; <Plug>(easymotion-overwin-f)
 
 " ==================
 " My custom commands
@@ -99,11 +108,11 @@ nnoremap <C-j> :cnext<CR> :norm! zz<CR>
 nnoremap <C-k> :cprev<CR> :norm! zz<CR>
 nnoremap <C-h> :cfirst<CR> :norm! zt<CR>
 nnoremap <C-l> :clast<CR> :norm! zz<CR>
-nnoremap <space>f :ZKfind<space>
-nnoremap <space>, :noh<CR>
-nnoremap <space>. :cclose<CR>
-nnoremap <space>z :NERDTreeToggle<CR>
-nnoremap <space>x :NERDTreeFind<CR>
+nnoremap <leader>f :ZKfind<space>
+nnoremap <leader>, :noh<CR>
+nnoremap <leader>. :cclose<CR>
+nnoremap <leader>z :NERDTreeToggle<CR>
+nnoremap <leader>x :NERDTreeFind<CR>
 
 " =======================
 " Stuff to run on startup
@@ -186,8 +195,8 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nmap <leader>rn <Plug>(coc-rename)
 
 " Remap for format selected region
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+xmap ff <Plug>(coc-format-selected)
+nmap ff <Plug>(coc-format-selected)
 
 augroup mygroup
   autocmd!

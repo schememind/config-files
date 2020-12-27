@@ -4,11 +4,22 @@
     "java.home": "C:\\Program Files\\Java\\jdk1.8.0_131",
     "suggest.minTriggerInputLength": 2,
     "languageserver": {
-    "clangd": {
-      "command": "clangd",
-      "args": ["--background-index"],
-      "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".vim/", ".git/", ".hg/"],
-      "filetypes": ["c", "cpp", "objc", "objcpp"]
-    }
+        "clangd": {
+            "command": "clangd",
+            "args": ["--background-index"],
+            "rootPatterns": ["compile_flags.txt", "compile_commands.json", ".vim/", ".git/", ".hg/"],
+             "filetypes": ["c", "cpp", "objc", "objcpp"]
+        },
+        "d": {
+            "command": "$HOME\\AppData\\Local\\dub\\packages\\.bin\\dls-latest\\dls.exe",
+            "args": ["--stdio"],
+            "filetypes": ["d"],
+            "trace.server": "off",
+            "rootPatterns": ["dub.json", "dub.sdl"],
+            "initializationOptions": {
+            },
+            "settings": {
+            }
+        }
   }
 }
