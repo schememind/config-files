@@ -44,10 +44,12 @@
   :bind ("M-s" . avy-goto-char))
 
 ;; Expand region with C-=
-;; Shring region wiht C-- C-=
+;; Shrink region with C-+
 (use-package expand-region
   :ensure t
-  :bind ("C-=" . er/expand-region))
+  :bind ("C-=" . er/expand-region)
+  :bind ("C-+" . er/contract-region)
+  )
 
 ;; Multiple cursors
 (use-package multiple-cursors
@@ -55,7 +57,7 @@
   :bind (("C-S-c C-S-c" . mc/edit-lines)
          ("C->" . mc/mark-next-like-this)
          ("C-<" . mc/mark-previous-like-this)
-         ("C-c C-<" . mc/mark-all-like-this))
+         ("C-c d" . mc/mark-all-like-this))
   )
 
 ;; helm enhanced searching
@@ -65,7 +67,7 @@
          ("C-x C-f" . helm-find-files)
          ("C-x f" . helm-recentf)
         ; ("C-SPC" . helm-dabbrev)
-        ; ("M-y" . helm-show-kill-ring)
+         ("M-y" . helm-show-kill-ring)
          ("C-x b" . helm-buffers-list))
   :config (progn
       (setq helm-buffers-fuzzy-matching t)
@@ -73,7 +75,9 @@
 (use-package helm-swoop     ; Replace standard C-s with helm search
   :ensure t
   :bind (("C-s" . helm-swoop)
-         ("M-s" . helm-swoop-back-to-last-point)))
+         ;;("M-s" . helm-swoop-back-to-last-point)
+         )
+  )
 (use-package helm-ag  ;; Use Silver Searcher installed and specified in PATH variable
   :ensure t
   :requires helm
@@ -92,13 +96,17 @@
   :ensure t
   :config (helm-projectile-on))
 
-;; Treemacs
-(use-package treemacs
-  :ensure t)
-
 ;; D language
 (use-package d-mode
   :ensure t)
+
+;; YAML mode + file association + correct newline handling
+(use-package yaml-mode
+  :ensure t)
+(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+(add-hook 'yaml-mode-hook
+    '(lambda ()
+        (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
 
 ;; =========
 ;; evil-mode
@@ -147,14 +155,13 @@ Position the cursor at it's beginning, according to the current mode."
 
 (global-set-key (kbd "M-o") 'zk-smart-open-line)
 (global-set-key (kbd "M-O") 'zk-smart-open-line-above)
-(global-set-key (kbd "M-s") 'avy-goto-char)
 
 ;; =======================
 ;; My personal preferences
 ;; =======================
 ;; Toolbars
 (tool-bar-mode -1)
-; (menu-bar-mode -1)
+(menu-bar-mode -1)
 ;; Always show column number
 (setq column-number-mode t)
 ;(toggle-scroll-bar -1)
@@ -163,12 +170,12 @@ Position the cursor at it's beginning, according to the current mode."
 ;; Set tab to 4 spaces
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
-(setq indent-line-function 'insert-tab)
+;(setq indent-line-function 'insert-tab)
 (setq c-default-style "stroustrup")
 ;; Personal key bindings
 (global-set-key (kbd "<f8>") 'toggle-menu-bar-mode-from-frame)
 ;; Display time
-(display-time-mode 1)
+;; (display-time-mode 1)
 ;;(display-time-day-and-date 1)
 ;;(display-time-24hr-format display-time-format 1)
 ;; Font
@@ -184,11 +191,16 @@ Position the cursor at it's beginning, according to the current mode."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (wombat)))
- '(package-selected-packages (quote (powerline use-package))))
+ '(custom-enabled-themes '(wombat))
+ '(helm-minibuffer-history-key "M-p")
+ '(package-selected-packages
+   '(evil-collection evil d-mode helm-projectile projectile which-key use-package try flycheck company)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(put 'narrow-to-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
