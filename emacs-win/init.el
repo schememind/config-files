@@ -178,6 +178,12 @@ Position the cursor at it's beginning, according to the current mode."
 ;; (display-time-mode 1)
 ;;(display-time-day-and-date 1)
 ;;(display-time-24hr-format display-time-format 1)
+(delete-selection-mode t)    ;; Delete selection when typing
+(setq visible-bell t)        ;; Disable beeping
+(global-visual-line-mode t)  ;; Word wrap by whole words
+(setq show-paren-delay 0)
+(show-paren-mode t)          ;; Mark matching parentheses
+(setq show-paren-style 'parenthesis)    ;; 'expression to color-mark the whole expression between parentheses
 ;; Font
 (set-face-attribute 'default nil
                     :family "Consolas"
