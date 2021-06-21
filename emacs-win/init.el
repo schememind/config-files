@@ -96,6 +96,15 @@
   :ensure t
   :config (helm-projectile-on))
 
+;; Automatic closing of parentheses
+(use-package smartparens
+  :ensure t
+  :config
+  (smartparens-global-mode t)
+  (setq sp-show-pair-from-inside 1)
+  (require 'smartparens-config)
+  :diminish smartparens-mode)
+
 ;; D language
 (use-package d-mode
   :ensure t)
@@ -190,6 +199,11 @@ Position the cursor at it's beginning, according to the current mode."
                     :height 100
                     :weight 'normal
                     :width 'normal)
+;; Mac OS X: use Command key as "M" instead of Alt
+(setq mac-option-key-is-meta nil
+      mac-command-key-is-meta t
+      mac-command-modifier 'meta
+      mac-option-modifier 'none)
 ;; Open config file at startup
 (find-file "~/.emacs.d/init.el")
 (custom-set-variables
