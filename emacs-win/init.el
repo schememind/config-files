@@ -1,3 +1,8 @@
+;; TODO before run:
+;; 1. ag (Silver searcher) - download and add to PATH environment variable
+;; 2. plantuml - download jar file (specify its location in variables below)
+;; 3. graphviz - download and add to PATH environment variable
+
 (setq inhibit-startup-message t)
 
 (require 'package)
@@ -51,13 +56,13 @@
   :bind ("C-+" . er/contract-region)
   )
 
-;; Multiple cursors
+;; Multiple cursors (I personally use 'M-%' or 'Helm + C-c C-e' more often)
 (use-package multiple-cursors
   :ensure t
   :bind (("C-S-c C-S-c" . mc/edit-lines)
          ("C->" . mc/mark-next-like-this)
          ("C-<" . mc/mark-previous-like-this)
-         ("C-c d" . mc/mark-all-like-this))
+         ("C-c d" . mc/mark-all-like-this))   ;; TODO conflicts with zetteldeft C-c d
   )
 
 ;; helm enhanced searching
@@ -115,7 +120,113 @@
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
 (add-hook 'yaml-mode-hook
     '(lambda ()
-        (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+       (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+
+;; ========
+;; LSP mode
+;; ========
+;; To activate this mode run command 'lsp' (not 'lsp-mode'!) for every file you open.
+;; Better simply apply a hook script.
+;; Useful commands: lsp-find-definition, lsp-find-declaration, lsp-find-references
+(use-package lsp-mode
+  :ensure t
+  :commands (lsp lsp-deferred)
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :hook
+  (c++-mode . lsp-deferred)
+  (c-mode . lsp-deferred)
+  ;;(java-mode . lsp-deferred)
+  ;; The following programs must be in the PATH for D language (TODO: still no working):
+  ;; - DCD
+  ;; - serve-d (https://github.com/Pure-D/serve-d#installation)
+  ;;(d-mode . lsp-deferred)
+  ;;(python-mode . lsp-deferred)
+  (lsp-mode . lsp-enable-which-key-integration)
+  )
+;; Useful commands: lsp-ui-peek-find-definitions (M-.), lsp-ui-peek-find-references (M-?) <-- TODO
+(use-package lsp-ui
+  :commands lsp-ui-mode)
+(use-package helm-lsp
+  :commands helm-lsp-workspace-symbol)
+;; All commands start with 'lsp-treemacs...'
+(use-package lsp-treemacs
+  :ensure t)
+
+;; ============
+;; Dired tweaks
+;; ============
+;; When helm is started before displaying dired, always choose the top-most directory in the list!
+;; (https://github.com/Fuco1/dired-hacks)
+;; 1. Expand folders with indentation (i - expand; ; - shrink)
+(use-package dired-subtree
+  :ensure t
+  :config
+  (bind-keys :map dired-mode-map
+             ("i" . dired-subtree-insert)
+             (";" . dired-subtree-remove)
+             ))
+
+;; ===============
+;; Org-mode tweaks
+;; ===============
+(setq calendar-week-start-day 1)    ;; Monday as start date of the week
+
+;; ============================================================
+;; Zettelkasten - 'zetteldeft' package on top of 'deft' package
+;; ============================================================
+;; All notes are kept as plain text files in a single folder.
+;; TODO: currently evil mode is turned on automatically when new note is created?
+;; C-c d n: new note
+;; C-c d N: new note + link
+;; C-c d B: new note + backlink
+;; C-c d f: follow link
+;; C-c d o: open note from zetteldeft folder
+(use-package deft
+  :ensure t
+  :custom
+    (deft-extensions '("org" "md" "txt"))
+    (deft-directory "~/notes")             ;; Folder for all notes
+    (deft-use-filename-as-title t))
+(use-package zetteldeft
+  :ensure t
+  :after deft
+  :config (zetteldeft-set-classic-keybindings))
+
+;; ========
+;; PlantUML
+;; ========
+;; Requires plantuml.jar and optianally GraphViz for additional graph types.
+;;
+;; In org-mode file add '#+startup: inlineimages' option and create babel block like this:
+;;
+;; #+begin_src plantuml :file testdiagram.png :exports results
+;;     ...
+;; #+end_src
+;; #+results:
+;; file:testdiagram.png
+;;
+;; When in babel block run 'C-c C-c' to render/refresh the image.
+
+;; Optionally install plantuml-mode for syntax highlighting in babel blocks:
+;;(use-package plantuml-mode
+;;  :ensure t)
+;;(setq plantuml-jar-path "c:/MyPrograms/PlantUML/plantuml.jar")      ;; TODO modify accordingly
+;;(setq plantuml-default-exec-mode 'jar)                              ;; Use local jar instead of server
+;;(add-to-list 'auto-mode-alist '("\\.plantuml\\'" . plantuml-mode))  ;; Files with .plantuml extension
+
+;; Configure org-babel to render plantuml graphs
+(with-eval-after-load 'org
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((plantuml . t)
+   )))
+
+(setq org-plantuml-jar-path
+      (expand-file-name "c:/MyPrograms/PlantUML/plantuml.jar"))     ;; TODO modify accordingly
+
+(setq org-confirm-babel-evaluate nil)                               ;; Execute block evaluation without confirmation
+(add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)  ;; Display/update images in the buffer after evaluation
 
 ;; =========
 ;; evil-mode
@@ -193,6 +304,10 @@ Position the cursor at it's beginning, according to the current mode."
 (setq show-paren-delay 0)
 (show-paren-mode t)          ;; Mark matching parentheses
 (setq show-paren-style 'parenthesis)    ;; 'expression to color-mark the whole expression between parentheses
+(global-auto-revert-mode t)  ;; Auto refresh buffers from the disk
+;; Store all backup~ files in a specific directory and don't delete hardlinks
+(setq backup-directory-alist '(("." . "~/.emacs.d/zk_backups")))
+(setq backup-by-copying t)
 ;; Font
 (set-face-attribute 'default nil
                     :family "Consolas"
@@ -211,7 +326,11 @@ Position the cursor at it's beginning, according to the current mode."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes '(wombat))
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
+ '(custom-enabled-themes '(leuven))
  '(helm-minibuffer-history-key "M-p")
  '(package-selected-packages
    '(evil-collection evil d-mode helm-projectile projectile which-key use-package try flycheck company)))
@@ -224,3 +343,4 @@ Position the cursor at it's beginning, according to the current mode."
 (put 'narrow-to-region 'disabled nil)
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
+(put 'narrow-to-page 'disabled nil)
