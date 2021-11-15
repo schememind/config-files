@@ -56,13 +56,13 @@
   :bind ("C-+" . er/contract-region)
   )
 
-;; Multiple cursors (I personally use 'M-%' or 'Helm + C-c C-e' more often)
+;; Multiple cursors (For find'n'replace I personally use 'M-%' or 'Helm + C-c C-e' more often)
 (use-package multiple-cursors
   :ensure t
-  :bind (("C-S-c C-S-c" . mc/edit-lines)
-         ("C->" . mc/mark-next-like-this)
-         ("C-<" . mc/mark-previous-like-this)
-         ("C-c d" . mc/mark-all-like-this))   ;; TODO conflicts with zetteldeft C-c d
+  :bind (("C-S-c C-S-c" . mc/edit-lines)       ;; First select region, then run this command to edit all its lines.
+         ("C->" . mc/mark-next-like-this)      ;; If region is selected: MARK NEXT OCCURRENCE; If region not selected: ADD CURSOR TO NEXT LINE.
+         ("C-<" . mc/mark-previous-like-this)  ;; If region is selected: MARK PREVIOUS OCCURRENCE; If region not selected: ADD CURSOR TO PREVIOUS LINE.
+         ("C-c C->" . mc/mark-all-like-this))
   )
 
 ;; helm enhanced searching
