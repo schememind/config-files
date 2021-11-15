@@ -273,6 +273,17 @@ Position the cursor at it's beginning, according to the current mode."
   (forward-line -1)
   (indent-according-to-mode))
 
+;; Taken from http://blog.bookworm.at/2007/03/pretty-print-xml-with-emacs.html
+(defun zk_pretty-format_xml (begin end)
+  "Format selected XML"
+  (interactive "r")
+  (save-excursion
+    (nxml-mode)
+    (goto-char begin)
+    (while (search-forward-regexp "\>[ \\t]*\<" nil t) 
+      (backward-char) (insert "\n") (setq end (1+ end)))
+    (indent-region begin end)))
+
 (global-set-key (kbd "M-o") 'zk-smart-open-line)
 (global-set-key (kbd "M-O") 'zk-smart-open-line-above)
 
