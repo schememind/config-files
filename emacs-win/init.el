@@ -171,6 +171,7 @@
 ;; Org-mode tweaks
 ;; ===============
 (setq calendar-week-start-day 1)    ;; Monday as start date of the week
+(setq org-startup-indented t)       ;; Visually indent levels of org files (indentation is not real)
 
 ;; ============================================================
 ;; Zettelkasten - 'zetteldeft' package on top of 'deft' package
