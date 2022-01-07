@@ -204,23 +204,22 @@
 ;; #+begin_src plantuml :file testdiagram.png :exports results
 ;;     ...
 ;; #+end_src
-;; #+results:
-;; file:testdiagram.png
 ;;
 ;; When in babel block run 'C-c C-c' to render/refresh the image.
 
 ;; Optionally install plantuml-mode for syntax highlighting in babel blocks:
-;;(use-package plantuml-mode
-;;  :ensure t)
-;;(setq plantuml-jar-path "c:/MyPrograms/PlantUML/plantuml.jar")      ;; TODO modify accordingly
-;;(setq plantuml-default-exec-mode 'jar)                              ;; Use local jar instead of server
-;;(add-to-list 'auto-mode-alist '("\\.plantuml\\'" . plantuml-mode))  ;; Files with .plantuml extension
+(use-package plantuml-mode
+  :ensure t)
+(setq plantuml-jar-path "c:/MyPrograms/PlantUML/plantuml.jar")      ;; TODO modify accordingly
+(setq plantuml-default-exec-mode 'jar)                              ;; Use local jar instead of server
+(add-to-list 'auto-mode-alist '("\\.plantuml\\'" . plantuml-mode))  ;; Files with .plantuml extension
 
 ;; Configure org-babel to render plantuml graphs
 (with-eval-after-load 'org
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((plantuml . t)
+   (dot . t)    ;; graphviz
    )))
 
 (setq org-plantuml-jar-path
@@ -320,6 +319,19 @@ Position the cursor at it's beginning, according to the current mode."
 ;; Store all backup~ files in a specific directory and don't delete hardlinks
 (setq backup-directory-alist '(("." . "~/.emacs.d/zk_backups")))
 (setq backup-by-copying t)
+
+;; Smooth scrolling:
+;; Good speed and allow scrolling through large images (pixel-scroll).
+;; Note: Scroll lags when point must be moved but increasing the number
+;;       of lines that point moves in pixel-scroll.el ruins large image
+;;       scrolling. So unfortunately I think we'll just have to live with
+;;       this.
+(pixel-scroll-mode)
+(setq pixel-dead-time 0) ; Never go back to the old scrolling behaviour.
+(setq pixel-resolution-fine-flag t) ; Scroll by number of pixels instead of lines (t = frame-char-height pixels).
+(setq mouse-wheel-scroll-amount '(1)) ; Distance in pixel-resolution to scroll each mouse wheel event.
+(setq mouse-wheel-progressive-speed nil) ; Progressive speed is too fast for me.
+
 ;; Font
 (set-face-attribute 'default nil
                     :family "Consolas"
