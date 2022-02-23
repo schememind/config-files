@@ -2,6 +2,9 @@
 ;; 1. ag (Silver searcher) - download and add to PATH environment variable
 ;; 2. plantuml - download jar file (specify its location in variables below)
 ;; 3. graphviz - download and add to PATH environment variable
+;; 4. Add folder containing diff.exe to PATH environment variable
+;;    (e.g. as a part of Git Bash located inside C:\Program Files\Git\usr\bin)
+;;    in order to use ediff.
 
 (setq inhibit-startup-message t)
 
@@ -87,7 +90,7 @@
   :ensure t
   :requires helm
   :config
-  (setq helm-ag-base-command '--vimgrep)
+  (setq helm-ag-base-command '--vimgrep)  ;; Windows users should set this option for using helm-do-ag (to search with additional command line arguments)
   :bind (("<f7>" . helm-ag))  ;; This does not work for some reason
   )
 
@@ -170,8 +173,13 @@
 ;; ===============
 ;; Org-mode tweaks
 ;; ===============
-(setq calendar-week-start-day 1)    ;; Monday as start date of the week
-(setq org-startup-indented t)       ;; Visually indent levels of org files (indentation is not real)
+(setq ;; org-startup-indented t             ;; Visually indent levels of org files (indentation is not real)
+      calendar-week-start-day 1          ;; Monday as start date of the week
+;;      org-pretty-entities t              ;; Nicer looking special symbols (e.g. superscript)
+;;      org-hide-emphasis-markers t        ;; hide ** for bold, // for italic etc
+      org-startup-with-inline-images t   ;; Inline images
+;;      org-image-actual-width '(300)      ;; #+attr_org: :width 300 - by default
+      )
 
 ;; ============================================================
 ;; Zettelkasten - 'zetteldeft' package on top of 'deft' package
@@ -274,7 +282,7 @@ Position the cursor at it's beginning, according to the current mode."
   (indent-according-to-mode))
 
 ;; Taken from http://blog.bookworm.at/2007/03/pretty-print-xml-with-emacs.html
-(defun zk_pretty-format_xml (begin end)
+(defun zk-pretty-format_xml (begin end)
   "Format selected XML"
   (interactive "r")
   (save-excursion
@@ -284,8 +292,74 @@ Position the cursor at it's beginning, according to the current mode."
       (backward-char) (insert "\n") (setq end (1+ end)))
     (indent-region begin end)))
 
+(defun zk-insert-src ()
+  "Insert org source code block at cursor position"
+  (interactive)
+  (insert "#+BEGIN_SRC ")
+  (newline)
+  (insert "#+END_SRC")
+  (forward-line -1)
+  (forward-char 12))
+
+(defun zk-insert-plantuml ()
+  "Insert plantuml org source block with a sample code at cursor position"
+  (interactive)
+  (insert (concat "#+BEGIN_SRC plantuml :file " (read-string "Output file name without extension: ") ".png :exports results"))
+  (newline)
+  (insert "' Press C-c C-c to generate and display results.")
+  (newline)
+  (insert "' Call org-indent-region (C-M-\\) to format the block.")
+  (newline)
+  (insert "' Add line '#+STARTUP: inlineimages' to this file in order to see images.")
+  (newline)
+  (insert "' Good reference page: https://plantuml.com/deployment-diagram")
+  (newline)
+  (newline)
+  (insert "package mypackage as \"Package title\" {")
+  (newline)
+  (insert "    left to right direction")
+  (newline)
+  (insert "    rectangle r1 as \"Some text\\n    here\"")
+  (newline)
+  (insert "    node n2 as \"And here\"")
+  (newline)
+  (insert "}")
+  (newline)
+  (insert "actor a1 as \"Person\" #lightblue")
+  (newline)
+  (newline)
+  (insert "r1 <--> n2 : \"Link description\"")
+  (newline)
+  (insert "r1 ..> a1")
+  (newline)
+  (insert "#+END_SRC")
+  (forward-line -10))
+
+(defun zk-insert-graphviz ()
+  "Insert graphviz org source block with a sample code at cursor position"
+  (interactive)
+  (setq gvfn (read-string "Output file name without extension: "))
+  (setq gvext (completing-read "Output format: " '("pdf" "png")))
+  (setq gveng (completing-read "Layout engine" ("dot" "fdp" "twopi" "circo" "neato" "osage" "patchwork" "sfdp")))
+  (insert (concat "#+BEGIN_SRC dot :file " gvfn "." gvext " :cmdline -K" gveng " -T" gvext ))
+  (newline)
+  (insert "' Press C-c C-c to generate and display results.")
+  (newline)
+  (insert "' Call org-indent-region (C-M-\\) to format the block.")
+  (newline)
+  (insert "' Examples:")
+  (newline)
+  (insert "' - Subgraphs: https://graphviz.org/Gallery/directed/cluster.html")
+  (newline)
+  (insert "#+END_SRC")
+  (forward-line -1))
+
 (global-set-key (kbd "M-o") 'zk-smart-open-line)
 (global-set-key (kbd "M-O") 'zk-smart-open-line-above)
+
+;; Use F7 for helm-ag.
+;; Or use C-u F7 to select a folder before searching.
+(global-set-key (kbd "<f7>") 'helm-ag)  ;; TODO temporarily moved it here, as binding inside use-package block did not work for some reason
 
 ;; =======================
 ;; My personal preferences
@@ -343,6 +417,8 @@ Position the cursor at it's beginning, according to the current mode."
       mac-command-key-is-meta t
       mac-command-modifier 'meta
       mac-option-modifier 'none)
+;; For Leuven theme: fontify the whole line for headings (with a background color).
+(setq org-fontify-whole-heading-line t)
 ;; Open config file at startup
 (find-file "~/.emacs.d/init.el")
 (custom-set-variables
