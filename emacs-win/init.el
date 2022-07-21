@@ -236,6 +236,12 @@
 (setq org-confirm-babel-evaluate nil)                               ;; Execute block evaluation without confirmation
 (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)  ;; Display/update images in the buffer after evaluation
 
+;; Graphviz syntax highlighting and indentation
+(use-package graphviz-dot-mode
+  :ensure t
+  :config
+  (setq graphviz-dot-indent-width 4))
+
 ;; =========
 ;; evil-mode
 ;; =========
@@ -340,16 +346,19 @@ Position the cursor at it's beginning, according to the current mode."
   (interactive)
   (setq gvfn (read-string "Output file name without extension: "))
   (setq gvext (completing-read "Output format: " '("pdf" "png")))
-  (setq gveng (completing-read "Layout engine" ("dot" "fdp" "twopi" "circo" "neato" "osage" "patchwork" "sfdp")))
+  (setq gveng (completing-read "Layout engine" '("dot" "fdp" "twopi" "circo" "neato" "osage" "patchwork" "sfdp")))
   (insert (concat "#+BEGIN_SRC dot :file " gvfn "." gvext " :cmdline -K" gveng " -T" gvext ))
   (newline)
-  (insert "' Press C-c C-c to generate and display results.")
+  (insert "// Press C-c C-c to generate and display results.")
   (newline)
-  (insert "' Call org-indent-region (C-M-\\) to format the block.")
+  (insert "// Call org-indent-region (C-M-\\) to format the block.")
   (newline)
-  (insert "' Examples:")
+  (insert "// Examples:")
   (newline)
-  (insert "' - Subgraphs: https://graphviz.org/Gallery/directed/cluster.html")
+  (insert "// - Subgraphs: https://graphviz.org/Gallery/directed/cluster.html")
+  (newline)
+  (insert "// - Shapes and record-based nodes: https://graphviz.org/doc/info/shapes.html")
+  (newline)
   (newline)
   (insert "#+END_SRC")
   (forward-line -1))
