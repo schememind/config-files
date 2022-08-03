@@ -36,6 +36,7 @@
     :ensure t
     :config
         (setq company-idle-delay 0)
+        (setq company-dabbrev-downcase nil)    ;; Keep original letter case in autocomplete suggestions
         (global-company-mode 1)
         (global-set-key (kbd "C-<tab>") 'company-complete))
 
