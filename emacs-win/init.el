@@ -400,6 +400,7 @@ Position the cursor at it's beginning, according to the current mode."
 (show-paren-mode t)          ;; Mark matching parentheses
 (setq show-paren-style 'parenthesis)    ;; 'expression to color-mark the whole expression between parentheses
 (global-auto-revert-mode t)  ;; Auto refresh buffers from the disk
+(global-so-long-mode t)      ;; Open files with long lines (e.g log files) in read-only so-long mode for better performance
 ;; Store all backup~ files in a specific directory and don't delete hardlinks
 (setq backup-directory-alist '(("." . "~/.emacs.d/zk_backups")))
 (setq backup-by-copying t)
