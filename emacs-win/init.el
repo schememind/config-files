@@ -288,6 +288,17 @@ Position the cursor at it's beginning, according to the current mode."
   (forward-line -1)
   (indent-according-to-mode))
 
+(defun zk-narrow-to-paragraph ()
+  "Narrow to paragraph under cursor."
+  (interactive)
+  (save-excursion
+    (let (start end)
+      (backward-paragraph)
+      (setq start (point))
+      (forward-paragraph)
+      (setq end (point))
+      (narrow-to-region start end))))
+
 ;; Taken from http://blog.bookworm.at/2007/03/pretty-print-xml-with-emacs.html
 (defun zk-pretty-format_xml (begin end)
   "Format selected XML"
@@ -366,6 +377,7 @@ Position the cursor at it's beginning, according to the current mode."
 
 (global-set-key (kbd "M-o") 'zk-smart-open-line)
 (global-set-key (kbd "M-O") 'zk-smart-open-line-above)
+(global-set-key (kbd "C-x n p") 'zk-narrow-to-paragraph)
 
 ;; Use F7 for helm-ag.
 ;; Or use C-u F7 to select a folder before searching.
