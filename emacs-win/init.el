@@ -409,6 +409,7 @@ Position the cursor at it's beginning, according to the current mode."
 (setq visible-bell t)        ;; Disable beeping
 (global-visual-line-mode t)  ;; Word wrap by whole words
 (setq show-paren-delay 0)
+(setq show-paren-when-point-in-periphery t)  ;; Both before and after parenthesis
 (show-paren-mode t)          ;; Mark matching parentheses
 (setq show-paren-style 'parenthesis)    ;; 'expression to color-mark the whole expression between parentheses
 (global-auto-revert-mode t)  ;; Auto refresh buffers from the disk
